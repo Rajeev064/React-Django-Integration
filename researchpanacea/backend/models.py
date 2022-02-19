@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+# I was  here 
 class Conference(models.Model):
     name = models.CharField(max_length=500)
     date = models.IntegerField()
