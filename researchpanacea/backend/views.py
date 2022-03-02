@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 import numpy as np
-from ResearchPanacea.researchpanacea.backend.models import Conference
+from .models import Conference
 
 
 # Create your views here.
