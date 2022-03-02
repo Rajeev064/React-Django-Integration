@@ -6,7 +6,7 @@ from datetime import datetime
 
 # Create your views here.
 def upcoming_conf(request):
-    if datetime.now().time().hour == 0:
+    if datetime.now().time().hour == 13:
         # print(datetime.now().time().hour)
         Title, Date, Venue, Web_link = insert_conf_db(request,'./conference.json')
         return HttpResponse(Title+"<br>"+Date +"<br>"+ Venue + "<br>"+ Web_link )
@@ -34,8 +34,9 @@ def insert_conf_db(request,name):
         mon = Date.split(',')[0][-3:]
         year = Date.split(',')[1]
         try:
-            t = Conference.objects.get(name = Title,year = year)
-            print('Data exists')
+            t = Conference.objects.get(name = Title,date=date,month = mon,year = year)
+            print(Title, date)
+            
         except:
             db = Conference(name = Title, date=date,month = mon,year = year, website = Web_link, address = Venue, saves = 0, image = "/",info = info)
             db.save()
