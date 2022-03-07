@@ -6,6 +6,7 @@ class ResearchPapersSerializer(serializers.ModelSerializer):
         model = ResearchPapers
         fields = '__all__'
 
+#User Serializer
 class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users

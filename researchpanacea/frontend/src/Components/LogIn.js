@@ -7,9 +7,40 @@ export default class LogIn extends Component {
     constructor(props) {
       super(props);
       this.state = {signupmode: true};
+
+      this.state = {
+        user: {
+          username: props.username,
+          email: props.email,
+          password: props.password
+        }
+      }
+
       this.handleSignInClick = this.handleSignInClick.bind(this);
       this.handleLogInClick = this.handleLogInClick.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
     }
+    handleUsernameChanged(event) {
+      var user        = this.state.user;
+      user.username  = event.target.value;
+  
+      this.setState({ user: user });
+    }
+  
+    handleEmailChanged(event) {
+      var user      = this.state.user;
+      user.email = event.target.value;
+  
+      this.setState({ user: user });
+    }
+    handlePasswordChanged(event) {
+      var user      = this.state.user;
+      user.password = event.target.value;
+  
+      this.setState({ user: user });
+    }
+    
+
     handleSignInClick() {
       this.setState({signupmode: true});
       console.log("set true")
@@ -17,6 +48,48 @@ export default class LogIn extends Component {
     handleLogInClick(){
         this.setState({signupmode: false});
       }
+
+    handleSubmit(event){
+    event.preventDefault();
+    const username =  this.state.user.username
+    const email = this.state.user.email
+    const password = this.state.user.password
+    const userdata = {username, email, password};
+
+    fetch('http://127.0.0.1:8000/api/user/', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userdata)
+    }).then(() => {
+      console.log(userdata)
+      console.log('new user added')
+      .then(response => response.json())
+      .then(data => this.setState({ 'username': this.state.user.username,
+      'email': this.state.user.email,
+      'password': this.state.user.password}))
+    })
+      // event.preventDefault()
+      // fetch("http://127.0.0.1:8000/api/user/",{
+      //   method:"POST",
+      //   headers:{
+      //     'Accept':'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     'data_options': {
+      //       'username': this.state.user.username,
+      //       'email': this.state.user.email,
+      //       'password': this.state.user.password,
+      //     }
+      //   })
+      // }).then(response => response.json())
+      // .then(data => this.setState({ 'username': this.state.user.username,
+      // 'email': this.state.user.email,
+      // 'password': this.state.user.password}))
+      // .catch(error=>{
+      //   {console.error("Error",error)}
+      // });
+    } 
   render() {
     const issignupclicked = this.state.signupmode    
     return (
@@ -55,17 +128,19 @@ export default class LogIn extends Component {
             <h2 className="title">Sign up</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" />
+              <input type="text"  value={this.state.user.username} onChange={this.handleUsernameChanged.bind(this)} placeholder="Username" />
             </div>
             <div className="input-field">
               <i className="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" />
+              <input type="email" value={this.state.user.email} onChange={this.handleEmailChanged.bind(this)} placeholder="Email" />
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
-              <input type="password" placeholder="Password" />
+              <input type="password" value={this.state.user.password} onChange={this.handlePasswordChanged.bind(this)} placeholder="Password" />
             </div>
-            <input type="submit" className="btn  sign-btn " value="Sign up" />
+            {/* register button */}
+            <input type="submit" className="btn  sign-btn " value="Sign up" onClick={this.handleSubmit}  />
+
             <p className="social-text">Or Sign up with social platforms</p>
             <div className="social-media">
               <a href="#" className="social-icon">
