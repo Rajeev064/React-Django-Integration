@@ -1,14 +1,15 @@
-import email
 import json
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from backend.models import *
 from .serializers import *
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
-
 from django.core.files.storage import default_storage
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
 def register(request):
@@ -32,12 +33,13 @@ def UsersApi(request,id=0):
         print(userdata)
         username = userdata['username']
         password = userdata['password']
+        hashed_pwd = make_password(password)
         email = userdata['email']
         try:
-            t = Users.objects.get(username = username,password = password)
+            t = Users.objects.get(username = username)
             print('USER EXISTS')
         except:    
-            db = Users(username = username,password = password, email= email )
+            db = Users(username = username,password = hashed_pwd, email= email )
             db.save()
         # user_data=JSONParser().parse(request)
         # users_serializer=UsersSerializer(data=user_data)
@@ -47,3 +49,49 @@ def UsersApi(request,id=0):
         print('DONE')
         return HttpResponse('DONE')
 
+
+@csrf_exempt
+def login(request):
+    if request.method == "POST":
+        logindata = json.loads(request.body)
+        print(logindata)
+        username = logindata['lusername']
+        password = logindata['lpassword']
+        print(username,password)
+        try:
+            t = Users.objects.get(username = username)
+            print(t)
+            if check_password(password, t.password):
+                request.session['username'] = username
+                print(request.session['username'])
+                return redirect('http://localhost:3000/research')
+            else:
+                print("Password Incorrect") 
+                return HttpResponse("Password Incorrect")   
+            # redirect to success page
+        except:    
+            print("LOGIN failed")
+            return HttpResponse("LOGIN FAILED")
+            # Return an 'invalid login' error message.
+
+@csrf_exempt
+def ResearchPapersAPI(request,id=0):
+    #All research papers will be visisble
+    if request.method == "GET":
+        papers = ResearchPapers.objects.all()
+        papers_serializer=ResearchPapersSerializer(papers,many=True)
+        print(papers_serializer.data)
+        return JsonResponse(papers_serializer.data,safe=False)
+    if request.method == "POST":
+        print(request)
+        # print(request.body)
+        # paperdata = json.loads(request.body)
+        # print(paperdata)
+        # title = paperdata['title']
+        # abstract = paperdata['abstract']
+        title = request.GET.get('title')
+        abstract = request.GET.get('abstract')
+        db = ResearchPapers(title = title,abstract = abstract)
+        db.save()
+        print("Research Paper Added")
+        return HttpResponse('DONE')

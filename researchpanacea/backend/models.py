@@ -38,14 +38,14 @@ class Users(models.Model):
 class ResearchPapers(models.Model):
     title = models.CharField(max_length=500)
     abstract = models.TextField()
-    collab_ids = models.CharField(max_length=500)
+    collab_ids = models.CharField(max_length=500, null=True)
     conference_name = models.CharField(max_length=200,null=True)
     journal_name = models.CharField(max_length=200,null=True)
-    domain = models.CharField(max_length=200)
-    keywords = models.TextField()
+    domain = models.CharField(max_length=200, null=True)
+    keywords = models.TextField(null=True)
     doi = models.CharField(max_length=300,null=True)
     media = models.CharField(max_length=100,null=True)
-    published_date = models.DateTimeField()
+    published_date = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Saved(models.Model):

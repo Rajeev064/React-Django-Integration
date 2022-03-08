@@ -7,6 +7,10 @@ export default class LogIn extends Component {
     constructor(props) {
       super(props);
       this.state = {signupmode: true};
+      this.state = {
+          lusername: props.lusername,
+          lpassword: props.lpassword,
+        };
 
       this.state = {
         user: {
@@ -14,33 +18,41 @@ export default class LogIn extends Component {
           email: props.email,
           password: props.password
         }
-      }
+      };
+
 
       this.handleSignInClick = this.handleSignInClick.bind(this);
       this.handleLogInClick = this.handleLogInClick.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     }
+
+
     handleUsernameChanged(event) {
       var user        = this.state.user;
       user.username  = event.target.value;
-  
       this.setState({ user: user });
     }
   
     handleEmailChanged(event) {
       var user      = this.state.user;
       user.email = event.target.value;
-  
       this.setState({ user: user });
     }
     handlePasswordChanged(event) {
       var user      = this.state.user;
       user.password = event.target.value;
-  
       this.setState({ user: user });
     }
-    
 
+    // LOGIN FORM FUNCTIONS
+    handleLPasswordChanged(event) {
+      this.setState({ lpassword: event.target.value });
+    }
+    handleLUsernameChanged(event) {
+      this.setState({ lusername: event.target.value });
+    }
+    
     handleSignInClick() {
       this.setState({signupmode: true});
       console.log("set true")
@@ -48,7 +60,7 @@ export default class LogIn extends Component {
     handleLogInClick(){
         this.setState({signupmode: false});
       }
-
+    
     handleSubmit(event){
     event.preventDefault();
     const username =  this.state.user.username
@@ -56,7 +68,8 @@ export default class LogIn extends Component {
     const password = this.state.user.password
     const userdata = {username, email, password};
 
-    fetch('http://127.0.0.1:8000/api/user/', {
+
+    fetch('http://127.0.0.1:8000/api/register/', {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userdata)
@@ -89,7 +102,26 @@ export default class LogIn extends Component {
       // .catch(error=>{
       //   {console.error("Error",error)}
       // });
-    } 
+    }
+    
+    handleLoginSubmit(event){
+
+      event.preventDefault();
+      const lusername =  this.state.lusername
+      const lpassword = this.state.lpassword
+      const logindata = {lusername, lpassword};
+      fetch('http://127.0.0.1:8000/api/login/', {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(logindata)
+    }).then(() => {
+      console.log(logindata)
+      .then(response => response.json())
+      .then(data => this.setState({ 'lusername': this.state.lusername,
+      'lpassword': this.state.lpassword}))
+    })
+    }
+    
   render() {
     const issignupclicked = this.state.signupmode    
     return (
@@ -97,17 +129,22 @@ export default class LogIn extends Component {
       <div className={`container container-anime  ${issignupclicked === true  ? 'sign-up-mode' : 'null'}`}>
       <div className="forms-container">
         <div className="signin-signup">
+
+
           <form action="#" className="sign-in-form">
             <h2 className="title">Log in</h2>
             <div className="input-field">
               <i className="fas fa-user"></i>
-              <input type="text" placeholder="Username" />
+              <input type="text" placeholder="Username" value={this.state.lusername} 
+              onChange={this.handleLUsernameChanged.bind(this)} />
             </div>
             <div className="input-field">
               <i className="fas fa-lock"></i>
-              <input type="password" placeholder="Password" />
+              <input type="password" placeholder="Password" value={this.state.lpassword}
+              onChange={this.handleLPasswordChanged.bind(this)} />
             </div>
-            <input type="submit" value="Login" className="btn  sign-btn  solid" />
+            <input type="submit" value="Login" className="btn  sign-btn  solid"
+            onClick={this.handleLoginSubmit}  />
             <p className="social-text">Or Sign in with social platforms</p>
             <div className="social-media">
               <a href="#" className="social-icon">
@@ -124,6 +161,8 @@ export default class LogIn extends Component {
               </a>
             </div>
           </form>
+
+
           <form action="#" className="sign-up-form">
             <h2 className="title">Sign up</h2>
             <div className="input-field">

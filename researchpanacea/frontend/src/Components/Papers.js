@@ -1,7 +1,44 @@
 import React, { Component } from 'react';
+import axios from "axios";
 import '../Css/rpaper.css';
 
 export default class Papers extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      items : [],
+    };
+  }
+    //   state = {
+    //     papers : [],
+    // }
+
+    // componentDidMount() {
+    //     let data ;
+    //     axios.get('http://127.0.0.1:8000/api/researchpapers/')
+    //     .then(res => {
+    //         data = res.data;
+    //         this.setState({
+    //             papers : data    
+    //         });
+    //         console.log(papers)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // }
+    componentDidMount() {
+      fetch("http://127.0.0.1:8000/api/researchpapers/")
+          .then((res) => res.json())
+          .then((json) => {
+              this.setState({
+                  items: json,
+              });
+              console.log(this.state.items)
+          })
+  }
+
   render() {
     return (
       <>
@@ -18,6 +55,10 @@ export default class Papers extends Component {
         
         <div className="tab-panels">
           <section id="marzen" className="tab-panel">
+
+      {/* Start Loop */}
+      {
+      this.state.items.map((item) => (
       <div className="blog-card alt">
           <div className="meta">
             <div className="photo" ></div>
@@ -32,19 +73,23 @@ export default class Papers extends Component {
             </ul>
           </div>
           <div className="description">
-            <h1>Research Paper Name
+            <h1>{item.title}
       </h1>
             <h2>Publication Name: Sample
 
       </h2>
-            <p>Speaking at the launch, Head West Africa Operations, Redington, Sivadoss Vijayakumar, emphasized the importance of innovation and excellent design in creating devices.
+            <p>{item.abstract}
       </p>
             <p className="read-more">
               <a href="#">Read More</a>
             </p>
           </div>
         </div>
-            <div className="blog-card alt">
+      ))
+  }
+        {/* End Loop */}
+
+          {/* <div className="blog-card alt">
           <div className="meta">
             <div className="photo"></div>
             <ul className="details">
@@ -70,6 +115,8 @@ export default class Papers extends Component {
             </p>
           </div>
         </div>
+        
+
       <div className="blog-card alt">
           <div className="meta">
             <div className="photo"></div>
@@ -121,10 +168,12 @@ export default class Papers extends Component {
               <a href="#">Read More</a>
             </p>
           </div>
-        </div>
+        </div> */}
 
         </section>
-          <section id="rauchbier" className="tab-panel">
+        <section id="rauchbier" className="tab-panel">
+
+        {/* Start Loop */}
         <div className="blog-card">
           <div className="meta">
             <div className="photo"   ></div>
@@ -148,7 +197,9 @@ export default class Papers extends Component {
             </p>
           </div>
         </div>
-              <div className="blog-card">
+        {/* End Loop */}
+
+          <div className="blog-card">
           <div className="meta">
             <div className="photo"   ></div>
             <ul className="details">

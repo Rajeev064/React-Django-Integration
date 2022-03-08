@@ -6,4 +6,6 @@ from .serializers import *
 from .viewsets import *
 
 urlpatterns=[
-    path('user/',views.UsersApi),]
+    path('register/',views.UsersApi),
+    path('researchpapers/',views.ResearchPapersAPI),
+    path('login/',views.login)]
