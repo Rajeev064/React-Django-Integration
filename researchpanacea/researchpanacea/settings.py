@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-w$t_(vhgq9&t@v3f1o7!t$sr2n%#3b#+41rk6ae)19ghq1@d3c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
 # WhiteListing React Port
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",

@@ -64,7 +64,13 @@ def login(request):
             if check_password(password, t.password):
                 request.session['username'] = username
                 print(request.session['username'])
-                return redirect('http://localhost:3000/research')
+                res = HttpResponse()
+                res.set_cookie('username',username)
+                # if "username" in request.COOKIES:
+                print("Stored in Cookie",request.get_cookie('username'))
+                # else:
+                #     print('username not in COOKIES')    
+                return HttpResponse("LOGGED IN")
             else:
                 print("Password Incorrect") 
                 return HttpResponse("Password Incorrect")   
@@ -78,9 +84,13 @@ def login(request):
 def ResearchPapersAPI(request,id=0):
     #All research papers will be visisble
     if request.method == "GET":
+        print(request.content_params)
         papers = ResearchPapers.objects.all()
         papers_serializer=ResearchPapersSerializer(papers,many=True)
         print(papers_serializer.data)
+        print(type(papers_serializer.data))
+        test = {'data':papers_serializer.data,'username':request.session['username']}
+        print(test)
         return JsonResponse(papers_serializer.data,safe=False)
     if request.method == "POST":
         print(request)

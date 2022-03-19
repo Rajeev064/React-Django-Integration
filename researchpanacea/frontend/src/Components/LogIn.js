@@ -178,7 +178,8 @@ export default class LogIn extends Component {
               <input type="password" value={this.state.user.password} onChange={this.handlePasswordChanged.bind(this)} placeholder="Password" />
             </div>
             {/* register button */}
-            <input type="submit" className="btn  sign-btn " value="Sign up" onClick={this.handleSubmit}  />
+            <input type="submit" className="btn  sign-btn " value="Sign up" onClick={this.handleSubmit}
+            />
 
             <p className="social-text">Or Sign up with social platforms</p>
             <div className="social-media">
