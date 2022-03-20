@@ -2,7 +2,8 @@ import React, {useState,Component} from 'react';
 import  Register from '../Images/register.svg';
 import Log from '../Images/log.svg';
 import '../Css/login.css';
-
+// import ReactSession from 'react-client-session';
+// ReactSession.setStoreType("localStorage");
 export default class LogIn extends Component {
     constructor(props) {
       super(props);
@@ -73,14 +74,8 @@ export default class LogIn extends Component {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userdata)
-    }).then(() => {
-      console.log(userdata)
-      console.log('new user added')
-      .then(response => response.json())
-      .then(data => this.setState({ 'username': this.state.user.username,
-      'email': this.state.user.email,
-      'password': this.state.user.password}))
     })
+
       // event.preventDefault()
       // fetch("http://127.0.0.1:8000/api/user/",{
       //   method:"POST",
@@ -114,11 +109,19 @@ export default class LogIn extends Component {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(logindata)
-    }).then(() => {
-      console.log(logindata)
-      .then(response => response.json())
-      .then(data => this.setState({ 'lusername': this.state.lusername,
-      'lpassword': this.state.lpassword}))
+    }).then(async response => {
+      const data = await response.json();
+      console.log(data)
+      
+      if(data['status'] == 200){
+        console.log(data['username']);
+
+      }
+      else{
+        console.log('Error do try again');
+      }
+
+      ;
     })
     }
     

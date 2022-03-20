@@ -1,4 +1,5 @@
 import json
+from urllib import response
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from backend.models import *
@@ -15,8 +16,8 @@ from django.contrib.auth.hashers import make_password, check_password
 def register(request):
     return HttpResponse("Register")
 
-def login(request)  :
-    return HttpResponse('Login')
+# def login(request)  :
+#     return HttpResponse('Login')
 
 def dashboard(request):
     return HttpResponse("Dashboard")
@@ -53,6 +54,7 @@ def UsersApi(request,id=0):
 @csrf_exempt
 def login(request):
     if request.method == "POST":
+        # print(request.session.keys())
         logindata = json.loads(request.body)
         print(logindata)
         username = logindata['lusername']
@@ -62,15 +64,11 @@ def login(request):
             t = Users.objects.get(username = username)
             print(t)
             if check_password(password, t.password):
-                request.session['username'] = username
-                print(request.session['username'])
-                res = HttpResponse()
-                res.set_cookie('username',username)
-                # if "username" in request.COOKIES:
-                print("Stored in Cookie",request.get_cookie('username'))
-                # else:
-                #     print('username not in COOKIES')    
-                return HttpResponse("LOGGED IN")
+                # request.session['username'] = username
+                # request.session['password'] = password
+                # print(request.session.keys())
+                # print(request.session['username']) 
+                return JsonResponse({'status':200,'username':username}) 
             else:
                 print("Password Incorrect") 
                 return HttpResponse("Password Incorrect")   

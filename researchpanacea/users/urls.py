@@ -8,4 +8,6 @@ from .viewsets import *
 urlpatterns=[
     path('register/',views.UsersApi),
     path('researchpapers/',views.ResearchPapersAPI),
-    path('login/',views.login)]
+    path('login/',views.login),
+    
+    ]
